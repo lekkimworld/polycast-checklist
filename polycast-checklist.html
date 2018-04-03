@@ -1,0 +1,93 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+
+<dom-module id="polycast-checklist">
+  <template>
+    <h2>[[name]]</h2>
+    <h3>Todo:</h3>
+    <dom-repeat items="{{tasks}}" as="task" observe="completed" filter="isNotCompleted">
+      <template>
+        <style>
+          .task {
+            display: flex;
+            align-items: center
+          }
+          paper-input {
+            display: inline-block
+          }
+        </style>
+        <div class="task">
+          <paper-checkbox checked="{{task.completed}}"></paper-checkbox>
+          <paper-input label="task name" no-label-float value="{{task.name}}"></paper-input>
+        </div>
+      </template>
+    </dom-repeat>
+
+    <h3>Completed:</h3>
+    <dom-repeat items="{{tasks}}" as="task" observe="completed" filter="isCompleted">
+      <template>
+        <style>
+          .task {
+            display: flex;
+            align-items: center
+          }
+          paper-input {
+            display: inline-block
+          }
+        </style>
+        <div class="task">
+          <paper-checkbox checked="{{task.completed}}"></paper-checkbox>
+          <paper-input label="task name" no-label-float value="{{task.name}}"></paper-input>
+        </div>
+      </template>
+    </dom-repeat>
+    
+    <paper-button on-click="addTask">Add Task</paper-button>
+  </template>
+
+  <script>
+    /**
+     * `polycast-checklist`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class PolycastChecklist extends Polymer.Element {
+      static get is() { return 'polycast-checklist'; }
+      static get properties() {
+        return {
+          name: {
+            type: String,
+            value: 'To-Do List'
+          },
+          tasks: {
+            type: Array,
+            value: () => []
+          }
+        };
+      }
+
+      addTask() {
+        const newTask = {
+          name: '',
+          completed: false
+        }
+        this.push('tasks', newTask);
+      }
+      isNotCompleted(task) {
+        return !task.completed;
+      }
+      isCompleted(task) {
+        return task.completed;
+      }
+    }
+
+    window.customElements.define(PolycastChecklist.is, PolycastChecklist);
+  </script>
+</dom-module>
